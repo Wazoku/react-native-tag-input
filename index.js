@@ -286,11 +286,9 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
 
     const content = (
       <View style={styles.tagInputContainer}>
-        {tags}
         {!this.props.hideInput ? (
           <View style={[
             styles.textInputContainer,
-            { width: this.state.inputWidth },
             this.props.textInputContainerStyle,
           ]}>
             <TextInput
@@ -299,7 +297,6 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
               onKeyPress={this.onKeyPress}
               value={this.props.text}
               style={[styles.textInput, {
-                width: this.state.inputWidth,
                 color: this.props.inputColor,
               }, this.props.textInputStyle]}
               onBlur={Platform.OS === "ios" ? this.onBlur : undefined}
@@ -315,6 +312,9 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
             />
           </View>
         ) : null}
+        <View style={styles.tagsContainer}>
+          {tags}
+        </View>
       </View>
     );
 
@@ -511,18 +511,20 @@ const styles = StyleSheet.create({
   },
   tagInputContainer: {
     flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
   },
   textInput: {
-    height: 36,
     fontSize: 16,
     flex: .6,
     marginBottom: 6,
     padding: 0,
   },
   textInputContainer: {
-    height: 36,
+
+  },
+  tagsContainer: {
+    flex: 1, 
+    flexDirection: 'row', 
+    flexWrap: 'wrap',
   },
   tag: {
     justifyContent: 'center',
