@@ -220,7 +220,12 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
 
   onBlur = (event: { nativeEvent: { text: string } }) => {
     invariant(Platform.OS === "ios", "only iOS gets text on TextInput.onBlur");
-    this.props.onChangeText(event.nativeEvent.text);
+    if(Platform.OS === "ios") this.props.onChangeText(event.nativeEvent.text);
+    this.props.onBlur()
+  }
+
+  onFocus = (event: { nativeEvent: { text: string } }) => {
+    this.props.onFocus()
   }
 
   onKeyPress = (event: { nativeEvent: { key: string } }) => {
@@ -299,7 +304,8 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
               style={[styles.textInput, {
                 color: this.props.inputColor,
               }, this.props.textInputStyle]}
-              onBlur={Platform.OS === "ios" ? this.onBlur : undefined}
+              onBlur={this.onBlur}
+              onFocus={this.onFocus}
               onChangeText={this.props.onChangeText}
               autoCapitalize="none"
               autoCorrect={false}
