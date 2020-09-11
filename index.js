@@ -219,7 +219,7 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
   }
 
   onBlur = (event: { nativeEvent: { text: string } }) => {
-    invariant(Platform.OS === "ios", "only iOS gets text on TextInput.onBlur");
+    console.log("only iOS gets text on TextInput.onBlur");
     if(Platform.OS === "ios") this.props.onChangeText(event.nativeEvent.text);
     this.props.onBlur()
   }
@@ -445,14 +445,16 @@ class Tag extends React.PureComponent<TagProps> {
       tagLabel = this.props.label;
     } else {
       tagLabel = (
-        <Text style={[
-            styles.tagText,
-            { color: this.props.tagTextColor },
-            this.props.tagTextStyle,
-          ]}>
-            {this.props.label}
-            {this.props.hideTagCloseIcon ? null : this.props.tagCloseIcon ? <Text>&nbsp;{this.props.tagCloseIcon}</Text> : <Text>&nbsp;&times;</Text>}
-        </Text>
+        <View style={{flexDirection: 'row', alignItems:'center'}}>
+          <Text style={[
+              styles.tagText,
+              { color: this.props.tagTextColor },
+              this.props.tagTextStyle,
+            ]}>
+              {this.props.label}
+          </Text>
+          {this.props.hideTagCloseIcon ? null : this.props.tagCloseIcon ? <Text>&nbsp;{this.props.tagCloseIcon}</Text> : <Text>&nbsp;&times;</Text>}
+        </View>
       );
     }
     if (this.props.hideTagCloseIcon) {
