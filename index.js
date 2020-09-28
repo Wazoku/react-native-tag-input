@@ -57,6 +57,10 @@ type OptionalProps = {
    */
   editable: boolean,
   /**
+   * If true, the tag will take the full screen width
+   */
+  fullWidthTags: boolean,
+  /**
    * Background color of tags
    */
   tagColor: string,
@@ -112,6 +116,7 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
     text: PropTypes.string.isRequired,
     onChangeText: PropTypes.func.isRequired,
     editable: PropTypes.bool,
+    fullWidthTags: PropTypes.bool,
     tagColor: PropTypes.string,
     tagTextColor: PropTypes.string,
     tagContainerStyle: ViewPropTypes.style,
@@ -282,6 +287,7 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
         tagTextStyle={this.props.tagTextStyle}
         key={index}
         editable={this.props.editable}
+        fullWidthTags={this.props.fullWidthTags}
         textInputContainerStyle={this.props.textInputContainerStyle}
         textInputStyle={this.props.textInputStyle}
         tagCloseIcon={this.props.tagCloseIcon}
@@ -446,46 +452,40 @@ class Tag extends React.PureComponent<TagProps> {
     } else {
       tagLabel = (
         <View style={{flexDirection: 'row', alignItems:'center'}}>
-          <Text style={[
-              styles.tagText,
-              { color: this.props.tagTextColor },
+          <Text 
+          numberOfLines={this.props.fullWidthTags ? 1 : null}
+          style={[
               this.props.tagTextStyle,
             ]}>
               {this.props.label}
           </Text>
-          {this.props.hideTagCloseIcon ? null : this.props.tagCloseIcon ? <Text>&nbsp;{this.props.tagCloseIcon}</Text> : <Text>&nbsp;&times;</Text>}
         </View>
       );
     }
-    if (this.props.hideTagCloseIcon) {
-      return (
-        <View
-        onLayout={this.onLayoutLastTag}
-        style={[
-          styles.tag,
-          { backgroundColor: this.props.tagColor },
-          this.props.tagContainerStyle,
-        ]}
-        >
-          {tagLabel}
-        </View>
-      )
-    }
     return (
-      <TouchableOpacity
-        disabled={!this.props.editable}
-        onPress={this.onPress}
-        onLayout={this.onLayoutLastTag}
-        style={[
-          styles.tag,
-          { backgroundColor: this.props.tagColor },
-          this.props.tagContainerStyle,
-        ]}
+      <View
+      onLayout={this.onLayoutLastTag}
+      style={[
+        styles.tag,
+        { backgroundColor: this.props.tagColor, flexDirection: 'row', alignItems:'center', justifyContent: 'space-between' },
+        this.props.tagContainerStyle,
+      ]}
       >
         {tagLabel}
-      </TouchableOpacity>
-    );
+        {this.props.hideTagCloseIcon ? null : this.renderRemoveTagAction()}
+      </View>
+    )
   }
+
+  renderRemoveTagAction = () => (
+    <TouchableOpacity
+        disabled={!this.props.editable}
+        onPress={this.onPress}
+        style={{marginHorizontal: 8}}
+      >
+        {this.props.tagCloseIcon ? <Text>&nbsp;{this.props.tagCloseIcon}</Text> : <Text>&nbsp;&times;</Text>}
+      </TouchableOpacity>
+  )
 
   onPress = () => {
     this.props.removeIndex(this.props.index);
