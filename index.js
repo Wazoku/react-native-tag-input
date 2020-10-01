@@ -258,7 +258,7 @@ class TagInput<T> extends React.PureComponent<Props<T>, State> {
   removeIndex = (index: number) => {
     const tags = [...this.props.value];
     tags.splice(index, 1);
-    this.props.onChange(tags);
+    this.props.onChange(tags, index);
   }
 
   scrollToEnd = () => {
